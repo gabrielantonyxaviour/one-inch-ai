@@ -92,7 +92,7 @@ export default function AIComponent() {
           )}
         </ScrollArea>
         <Separator className="" />
-        <div className="flex mx-auto py-2 w-[75%]">
+        <div className="flex mx-auto py-2 w-full">
           <Input
             type="text"
             disabled={false}
