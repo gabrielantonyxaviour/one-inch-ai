@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <div className="h-screen flex ">
       <div className="w-[75%]"></div>
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 h-[85%] my-auto">
         <AIComponent />
       </div>
     </div>
