@@ -18,6 +18,7 @@ export default function Page() {
   const [toToken, setToToken] = useState("link");
   const [toAmount, setToAmount] = useState("0");
   const [slippage, setSlippage] = useState("0.1");
+
   return status == "connected" ? (
     <div className="h-screen flex ">
       <Swap
