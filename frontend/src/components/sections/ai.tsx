@@ -19,6 +19,7 @@ import { ReactTyped } from "react-typed";
 import LoadingDots from "@/components/ui/loading-dots";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import axios from "axios";
 
 interface Convo {
   id: string;
@@ -34,20 +35,21 @@ export default function AIComponent() {
     },
   ]);
   const [prompt, setPrompt] = useState<string>("");
+  const [expertAi, setExpertAi] = useState<boolean>(false);
   const { status } = useAccount();
   return (
     <div className="h-[85%] my-auto pt-6 flex flex-col bg-background ">
-      <ScrollArea className="h-[90%] flex flex-col space-y-2 ">
+      <ScrollArea className="h-[90%] flex flex-col space-y-2 no-scrollbar">
         {convos.map((convo) => (
           <div
             key={convo.id}
             className={`flex text-xs ${
               convo.isAI ? "justify-start" : "justify-end"
-            } items-center space-x-2`}
+            } items-center space-x-2 my-1`}
           >
             {convo.isAI && (
               <Avatar className="h-9 w-9">
-                <AvatarImage src={"/logo.png"} alt="Avatar" />
+                <AvatarImage src={"/bot_avatar.jpg"} alt="Avatar" />
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
             )}
@@ -67,7 +69,7 @@ export default function AIComponent() {
             </Card>
             {!convo.isAI && (
               <Avatar className="h-9 w-9">
-                <AvatarImage src={"/coins/usdt.png"} alt="Avatar" />
+                <AvatarImage src={"/avatar.jpg"} alt="Avatar" />
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
             )}
@@ -79,7 +81,7 @@ export default function AIComponent() {
             className={`flex text-sm justify-start items-center space-x-2`}
           >
             <Avatar className="h-9 w-9">
-              <AvatarImage src={"/logo.png"} alt="Avatar" className="" />
+              <AvatarImage src={"/bot_avatar.jpg"} alt="Avatar" className="" />
               <AvatarFallback>OM</AvatarFallback>
             </Avatar>
             <Card className="max-w-[70%]">
@@ -112,19 +114,23 @@ export default function AIComponent() {
               message: prompt,
             };
             setConvos([...convos, currentConvo]);
-            await generateChatResponse({
-              input: prompt,
-              setConvo: (response) =>
-                setConvos([
-                  ...convos,
-                  currentConvo,
-                  {
-                    id: (convos.length + 1).toString(),
-                    isAI: true,
-                    message: response,
-                  },
-                ]),
+            const response = await axios.post("/api/classify", {
+              message: prompt,
             });
+            console.log(response.data);
+            setConvos([
+              ...convos,
+              currentConvo,
+              {
+                id: (convos.length + 1).toString(),
+                isAI: true,
+                message:
+                  response.data.response.response.length > 0
+                    ? response.data.response.response
+                    : "I am not sure how to respond to that. Can you please try again?",
+              },
+            ]);
+
             setPrompt("");
           }}
         >
