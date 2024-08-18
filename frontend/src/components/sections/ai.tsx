@@ -12,7 +12,6 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import generateChatResponse from "@/lib/openai/chat";
 import { useAccount } from "wagmi";
 import { forma } from "viem/chains";
 import { ReactTyped } from "react-typed";
