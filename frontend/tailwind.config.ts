@@ -21,6 +21,7 @@ const config: Config = {
         "infinite-scroll": "infinite-scroll 25s linear infinite",
         "fill-drain": "fillDrain 5s ease-in-out infinite",
       },
+
       keyframes: {
         fillDrain: {
           "0%, 100%": {

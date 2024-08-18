@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <div className="h-screen flex ">
       <div className="w-[75%]"></div>
-      <div className="flex-1 p-4 h-[85%] my-auto">
+      <div className="flex-1 flex flex-col justify-center p-4 h-full bg-background border-l-[0.1px] border-primary">
         <AIComponent />
       </div>
     </div>
