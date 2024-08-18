@@ -14,7 +14,9 @@ import { supportedchains, supportedcoins } from "@/lib/constants";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useAccount, useSwitchChain } from "wagmi";
 import Slippage from "./slippage";
-
+import { FusionSDK, NetworkEnum } from "@1inch/fusion-sdk";
+import { useEffect } from "react";
+import axios from "axios";
 interface SwapProps {
   selectedAction: boolean;
   setSelectedAction: (selectedAction: boolean) => void;
@@ -54,6 +56,13 @@ export default function Swap({
 }: SwapProps) {
   const { switchChainAsync } = useSwitchChain();
   const { chainId } = useAccount();
+  useEffect(() => {
+    (async function () {
+      console.log("FETCHING ORDERS");
+      const response = await axios.post("/api/one-inch/get-quote");
+      console.log(response.data);
+    })();
+  }, [chainId]);
   return (
     <div className="w-[75%] flex flex-col justify-center items-center">
       <Image src="/logo.png" width={100} height={100} alt="" />
@@ -69,7 +78,9 @@ export default function Swap({
                     ? "text-primary"
                     : "text-muted-foreground font-semibold"
                 }`}
-                onClick={() => setSelectedAction(false)}
+                onClick={async () => {
+                  setSelectedAction(false);
+                }}
               >
                 Swap
               </Button>
