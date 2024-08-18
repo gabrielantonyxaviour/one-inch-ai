@@ -44,6 +44,16 @@ export const supportedcoins: Record<string, any> = {
       11155111: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     },
   },
+  eth: {
+    name: "Ethereum",
+    symbol: "ETH",
+    image: "/coins/ethereum.png",
+  },
+  matic: {
+    name: "Polygon",
+    symbol: "MATIC",
+    image: "/coins/polygon.png",
+  },
 };
 
 export const supportedchains: Record<string, any> = {
@@ -51,15 +61,18 @@ export const supportedchains: Record<string, any> = {
     name: "Arbitrum",
     chainId: 421614,
     image: "/coins/arbitrum.png",
+    symbol: "ETH",
   },
   11155111: {
     name: "Ethereum",
     chainId: 11155111,
+    symbol: "ETH",
     image: "/coins/ethereum.png",
   },
   80002: {
     name: "Polygon",
     chainId: 80002,
+    symbol: "MATIC",
     image: "/coins/polygon.png",
   },
 };

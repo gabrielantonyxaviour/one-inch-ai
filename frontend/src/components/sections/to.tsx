@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { supportedcoins } from "@/lib/constants";
+import { supportedchains, supportedcoins } from "@/lib/constants";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Menubar,
@@ -10,6 +10,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
+import { useAccount } from "wagmi";
 export default function To({
   toChevron,
   setToChevron,
@@ -25,6 +26,7 @@ export default function To({
   toToken: string;
   setToToken: (toToken: string) => void;
 }) {
+  const { chainId } = useAccount();
   return (
     <Card className="w-full border-white bg-zinc-950">
       <CardTitle>
@@ -47,7 +49,7 @@ export default function To({
             >
               <div className="flex space-x-2 items-center ">
                 <Image
-                  src={`/coins/${toToken}.png`}
+                  src={supportedcoins[toToken].image}
                   width={20}
                   height={20}
                   alt=""
@@ -62,25 +64,52 @@ export default function To({
               </div>
             </MenubarTrigger>
             <MenubarContent>
-              {Object.values(supportedcoins).map((coin) => (
-                <MenubarItem
-                  onClick={() => {
-                    setToToken(coin.symbol.toLowerCase());
-                    setToChevron(true);
-                  }}
-                >
-                  <div className="flex space-x-2">
-                    <Image
-                      src={`/coins/${coin.symbol.toLowerCase()}.png`}
-                      width={20}
-                      height={20}
-                      alt=""
-                      className="rounded-full"
-                    />
-                    <p>{coin.symbol}</p>
-                  </div>
-                </MenubarItem>
-              ))}
+              <MenubarItem
+                onClick={() => {
+                  setToToken(
+                    supportedchains[
+                      (chainId || 11155111).toString()
+                    ].symbol.toLowerCase()
+                  );
+                  setToChevron(true);
+                }}
+              >
+                <div className="flex space-x-2">
+                  <Image
+                    src={
+                      supportedchains[(chainId || 11155111).toString()].image
+                    }
+                    width={20}
+                    height={20}
+                    alt=""
+                    className="rounded-full"
+                  />
+                  <p>
+                    {supportedchains[(chainId || 11155111).toString()].symbol}
+                  </p>
+                </div>
+              </MenubarItem>
+              {Object.values(supportedcoins)
+                .slice(0, -2)
+                .map((coin) => (
+                  <MenubarItem
+                    onClick={() => {
+                      setToToken(coin.symbol.toLowerCase());
+                      setToChevron(true);
+                    }}
+                  >
+                    <div className="flex space-x-2">
+                      <Image
+                        src={`/coins/${coin.symbol.toLowerCase()}.png`}
+                        width={20}
+                        height={20}
+                        alt=""
+                        className="rounded-full"
+                      />
+                      <p>{coin.symbol}</p>
+                    </div>
+                  </MenubarItem>
+                ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
