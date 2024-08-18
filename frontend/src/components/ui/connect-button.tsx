@@ -3,20 +3,28 @@ import { injected } from "wagmi/connectors";
 import { bscTestnet } from "viem/chains";
 import { Button } from "./button";
 import { Icons } from "./icons";
+import { useWalletInfo, useWeb3Modal } from "@web3modal/wagmi/react";
+import Image from "next/image";
 
 export default function ConnectButton() {
   const { address, status, chainId } = useAccount();
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { open, close } = useWeb3Modal();
+  const { walletInfo } = useWalletInfo();
   return status == "connected" ? (
     <Button
       variant="outline"
-      className="my-auto "
+      className="my-auto"
       onClick={() => {
-        disconnect();
+        open();
       }}
     >
-      <Icons.binance className="h-6 w-6 fill-current mr-2" />
+      <Image
+        src={walletInfo?.icon || ""}
+        width={20}
+        height={20}
+        alt=""
+        className="mr-2"
+      />
       {address?.slice(0, 6) + "..." + address?.slice(-6)}
     </Button>
   ) : (
@@ -25,10 +33,7 @@ export default function ConnectButton() {
       className="my-auto"
       onClick={() => {
         console.log("connect");
-        connect({
-          chainId: bscTestnet.id,
-          connector: injected(),
-        });
+        open();
       }}
     >
       Connect Wallet
