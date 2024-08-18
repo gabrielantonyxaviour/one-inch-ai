@@ -21,7 +21,7 @@ export default function Slippage({
       <AccordionItem value="item-1">
         <AccordionTrigger>Slippage Tolerance</AccordionTrigger>
         <AccordionContent>
-          <Tabs defaultValue="custom" className="w-full">
+          <Tabs defaultValue="0.1" className="w-full">
             <TabsList className="w-full flex">
               <TabsTrigger value="custom" className="flex">
                 <input
