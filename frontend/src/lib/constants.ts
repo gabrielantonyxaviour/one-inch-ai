@@ -94,3 +94,13 @@ export const supportedchains: Record<string, any> = {
     image: "/coins/polygon.png",
   },
 };
+
+export const COINMARKETCAP_IDS: Record<string, number> = {
+  weth: 2396,
+  link: 1975,
+  usdc: 3408,
+  usdt: 825,
+  dai: 4943,
+  eth: 1027,
+  matic: 3890,
+};

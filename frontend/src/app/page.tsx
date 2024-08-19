@@ -20,14 +20,15 @@ export default function Page() {
   const { status, address, chainId } = useAccount();
   const { switchChain } = useSwitchChain();
   const [selectedAction, setSelectedAction] = useState(false);
-  const [fromChevron, setFromChevron] = useState(false);
-  const [toChevron, setToChevron] = useState(false);
   const [fromAmount, setFromAmount] = useState("0");
   const [fromToken, setFromToken] = useState("usdt");
+  const [fromLoading, setFromLoading] = useState(false);
+  const [toLoading, setToLoading] = useState(false);
   const [toToken, setToToken] = useState("link");
   const [toAmount, setToAmount] = useState("0");
   const [slippage, setSlippage] = useState("0.1");
   const [sellingPrice, setSellingPrice] = useState("0");
+  const [sellingPriceLoading, setSellingPriceLoading] = useState(false);
   const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
     response: "",
     action: "",
@@ -55,6 +56,14 @@ export default function Page() {
       }
     }
   }, [classifyResponse]);
+
+  useEffect(() => {
+    console.log("From Token");
+    console.log(fromToken);
+    console.log("To Token");
+    console.log(toToken);
+  }, [fromToken, toToken, fromAmount, toAmount]);
+
   return status == "connected" ? (
     <div className="h-screen flex ">
       <AppComponent
