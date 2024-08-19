@@ -14,9 +14,9 @@ interface OrderProps {
   toToken: string;
   setToToken: (toToken: string) => void;
   toAmount: string;
-  setToAmount: (toAmount: string) => void;
   sellingPrice: string;
   setSellingPrice: (sellingPrice: string) => void;
+  sellingPriceLoading: boolean;
 }
 
 export default function Order({
@@ -27,14 +27,14 @@ export default function Order({
   toToken,
   setToToken,
   toAmount,
-  setToAmount,
   setSellingPrice,
   sellingPrice,
+  sellingPriceLoading,
 }: OrderProps) {
   const { chainId } = useAccount();
   if (chainId == undefined)
     return (
-      <div className="w-[75%] flex flex-col justify-center items-center">
+      <div className="w-[75%] flex flex-col justify-center items-center ">
         <Spinner />
       </div>
     );
@@ -49,9 +49,9 @@ export default function Order({
         />
         <To
           toAmount={toAmount}
-          setToAmount={setToAmount}
           toToken={toToken}
           setToToken={setToToken}
+          toLoading={sellingPriceLoading}
         />
         <div className="flex justify-between items-center my-4">
           <p>Pay {fromToken.toUpperCase()} at price</p>

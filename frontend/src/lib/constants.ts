@@ -29,7 +29,7 @@ export const supportedcoins: Record<string, any> = {
   usdt: {
     name: "Tether USD",
     symbol: "USDT",
-    image: "/coins/weth.png",
+    image: "/coins/usdt.png",
     token: {
       421614: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       11155111: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",

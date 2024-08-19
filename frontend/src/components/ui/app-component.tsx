@@ -24,18 +24,18 @@ interface AppComponentProps {
   toToken: string;
   setToToken: (toToken: string) => void;
   toAmount: string;
-  setToAmount: (toAmount: string) => void;
   slippage: string;
   setSlippage: (slippage: string) => void;
   sellingPrice: string;
   setSellingPrice: (sellingPrice: string) => void;
+  toLoading: boolean;
+  sellingPriceLoading: boolean;
 }
 export default function AppComponent({
   selectedAction,
   setSelectedAction,
   fromAmount,
   setFromAmount,
-  setToAmount,
   setToToken,
   fromToken,
   setFromToken,
@@ -45,6 +45,8 @@ export default function AppComponent({
   setSlippage,
   sellingPrice,
   setSellingPrice,
+  toLoading,
+  sellingPriceLoading,
 }: AppComponentProps) {
   const [chevron, setChevron] = useState(false);
   const { chainId } = useAccount();
@@ -158,11 +160,9 @@ export default function AppComponent({
               toToken,
               setToToken,
               toAmount,
-              setToAmount,
-              setSlippage,
-              slippage,
               sellingPrice,
               setSellingPrice,
+              sellingPriceLoading,
             }}
           />
         ) : (
@@ -175,9 +175,9 @@ export default function AppComponent({
               toToken,
               setToToken,
               toAmount,
-              setToAmount,
               setSlippage,
               slippage,
+              toLoading,
             }}
           />
         )}

@@ -12,16 +12,17 @@ import {
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import { useState } from "react";
+import Spinner from "../ui/loading";
 export default function To({
   toAmount,
-  setToAmount,
   toToken,
   setToToken,
+  toLoading,
 }: {
   toAmount: string;
-  setToAmount: (toAmount: string) => void;
   toToken: string;
   setToToken: (toToken: string) => void;
+  toLoading: boolean;
 }) {
   const { chainId } = useAccount();
   const [toChevron, setToChevron] = useState(false);
@@ -111,15 +112,17 @@ export default function To({
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
-        <Input
-          className="font-semibold border-none w-[50%] text-right hover:border-none"
-          disabled
-          value={toAmount}
-          onChange={(e) => {
-            const decimalRegex = /^\d+(\.\d*)?$/;
-            if (decimalRegex.test(e.target.value)) setToAmount(e.target.value);
-          }}
-        />
+        {toLoading ? (
+          <div className="pr-4">
+            <Spinner />
+          </div>
+        ) : (
+          <Input
+            className="font-semibold border-none w-[50%] text-right hover:border-none"
+            disabled
+            value={toAmount}
+          />
+        )}
       </CardContent>
       <CardFooter className="px-2 pb-2">
         <p className="text-xs text-muted-foreground">

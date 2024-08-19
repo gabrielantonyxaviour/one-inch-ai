@@ -29,7 +29,15 @@ export default function Slippage({
                   value={localSlippage}
                   placeholder="Custom"
                   onChange={(e) => {
-                    setLocalSlippage(e.target.value);
+                    const decimalRegex = /^\d+(\.\d*)?$/;
+                    if (
+                      (decimalRegex.test(e.target.value) &&
+                        parseFloat(e.target.value) <= 5) ||
+                      e.target.value == ""
+                    ) {
+                      setLocalSlippage(e.target.value);
+                      setSlippage(e.target.value);
+                    }
                   }}
                 />
                 %

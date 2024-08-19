@@ -27,8 +27,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const { searchParams } = req.nextUrl;
     const from = searchParams.get("from");
     const to = searchParams.get("to");
-    const amount = searchParams.get("amount");
-    if (from == null || to == null || amount == null) {
+    if (from == null || to == null) {
       return Response.json({
         success: false,
         amount: 0,
@@ -38,11 +37,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const fromToUSD = await getExchangeRate(COINMARKETCAP_IDS[from]);
     const toToUSD = await getExchangeRate(COINMARKETCAP_IDS[to]);
 
-    const fromInUSD = parseInt(amount) * fromToUSD;
-    const toAmount = fromInUSD / toToUSD;
     return Response.json({
       success: true,
-      amount: toAmount / 1000000000000000000,
+      amount: {
+        from: fromToUSD,
+        to: toToUSD,
+      },
       error: null,
     });
   } catch (error) {

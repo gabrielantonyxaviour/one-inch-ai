@@ -6,8 +6,9 @@ import AppComponent from "@/components/ui/app-component";
 
 import ConnectButton from "@/components/ui/connect-button";
 import { supportedchains } from "@/lib/constants";
+import axios from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useAccount, useBalance, useSwitchChain } from "wagmi";
 
 interface ClassifyResponse {
@@ -22,10 +23,13 @@ export default function Page() {
   const [selectedAction, setSelectedAction] = useState(false);
   const [fromAmount, setFromAmount] = useState("0");
   const [fromToken, setFromToken] = useState("usdt");
-  const [fromLoading, setFromLoading] = useState(false);
   const [toLoading, setToLoading] = useState(false);
   const [toToken, setToToken] = useState("link");
   const [toAmount, setToAmount] = useState("0");
+  const [conversionValue, setConversionValue] = useState("0");
+  const [fromCoversionValue, setFromConversionValue] = useState("0");
+  const [toCoversionValue, setToConversionValue] = useState("0");
+  const [conversionLoading, setConversionLoading] = useState(false);
   const [slippage, setSlippage] = useState("0.1");
   const [sellingPrice, setSellingPrice] = useState("0");
   const [sellingPriceLoading, setSellingPriceLoading] = useState(false);
@@ -34,7 +38,6 @@ export default function Page() {
     action: "",
     params: [],
   });
-
   useEffect(() => {
     console.log("Classify Response");
     console.log(classifyResponse);
@@ -58,11 +61,58 @@ export default function Page() {
   }, [classifyResponse]);
 
   useEffect(() => {
-    console.log("From Token");
-    console.log(fromToken);
-    console.log("To Token");
-    console.log(toToken);
-  }, [fromToken, toToken, fromAmount, toAmount]);
+    (async function () {
+      setToLoading(true);
+      setConversionLoading(true);
+      const response = await axios.get(
+        `/api/coinmarketcap/convert?from=${fromToken}&to=${toToken}`
+      );
+
+      console.log(response.data);
+      setFromConversionValue(response.data.amount.from);
+      setToConversionValue(response.data.amount.to);
+
+      if (selectedAction) {
+        const cValue = response.data.amount.from / response.data.amount.to;
+        setSellingPrice(response.data.amount.from);
+        setConversionValue(cValue.toString());
+        const f = fromAmount == "" ? "0" : fromAmount;
+        setToAmount((parseFloat(f) * cValue).toString());
+      } else {
+        const cValue = response.data.amount.from / response.data.amount.to;
+        console.log(cValue);
+        const f = fromAmount == "" ? "0" : fromAmount;
+        const s = slippage == "" ? "0" : slippage;
+        const cValueWithSlippage = cValue * (1 - parseFloat(s) / 100);
+
+        setConversionValue(cValue.toString());
+        setToAmount((parseFloat(f) * cValueWithSlippage).toString());
+      }
+      setConversionLoading(false);
+      setToLoading(false);
+    })();
+  }, [fromToken, toToken]);
+
+  useEffect(() => {
+    if (selectedAction) {
+      const f = fromAmount == "" ? "0" : fromAmount;
+      const s = sellingPrice == "" ? "0" : sellingPrice;
+      setToAmount((parseFloat(f) * parseFloat(s)).toString());
+    } else {
+      console.log(fromAmount);
+      console.log(conversionValue);
+      console.log(slippage);
+      const f = fromAmount == "" ? "0" : fromAmount;
+      const s = slippage == "" ? "0" : slippage;
+      setToAmount(
+        (
+          parseFloat(f) *
+          parseFloat(conversionValue) *
+          (1 - parseFloat(s) / 100)
+        ).toString()
+      );
+    }
+  }, [fromAmount, slippage, sellingPrice]);
 
   return status == "connected" ? (
     <div className="h-screen flex ">
@@ -70,7 +120,6 @@ export default function Page() {
         selectedAction={selectedAction}
         setSelectedAction={setSelectedAction}
         setFromAmount={setFromAmount}
-        setToAmount={setToAmount}
         fromAmount={fromAmount}
         toAmount={toAmount}
         fromToken={fromToken}
@@ -81,6 +130,8 @@ export default function Page() {
         setSlippage={setSlippage}
         setSellingPrice={setSellingPrice}
         sellingPrice={sellingPrice}
+        sellingPriceLoading={sellingPriceLoading}
+        toLoading={toLoading}
       />
 
       <div className="flex-1 flex flex-col justify-center p-4 h-full bg-background ">

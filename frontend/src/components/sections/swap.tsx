@@ -13,9 +13,9 @@ interface SwapProps {
   toToken: string;
   setToToken: (toToken: string) => void;
   toAmount: string;
-  setToAmount: (toAmount: string) => void;
   slippage: string;
   setSlippage: (slippage: string) => void;
+  toLoading: boolean;
 }
 
 export default function Swap({
@@ -26,9 +26,9 @@ export default function Swap({
   toToken,
   setToToken,
   toAmount,
-  setToAmount,
   setSlippage,
   slippage,
+  toLoading,
 }: SwapProps) {
   const { switchChainAsync } = useSwitchChain();
   const { chainId } = useAccount();
@@ -49,9 +49,9 @@ export default function Swap({
         />
         <To
           toAmount={toAmount}
-          setToAmount={setToAmount}
           toToken={toToken}
           setToToken={setToToken}
+          toLoading={toLoading}
         />
         <Slippage slippage={slippage} setSlippage={setSlippage} />
         <Button variant={"default"} className="w-full font-bold">

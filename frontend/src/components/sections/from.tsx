@@ -112,7 +112,7 @@ export default function From({
           value={fromAmount}
           onChange={(e) => {
             const decimalRegex = /^\d+(\.\d*)?$/;
-            if (decimalRegex.test(e.target.value))
+            if (decimalRegex.test(e.target.value) || e.target.value == "")
               setFromAmount(e.target.value);
           }}
         />
