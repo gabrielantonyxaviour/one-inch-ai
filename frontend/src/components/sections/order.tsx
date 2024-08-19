@@ -62,6 +62,7 @@ export default function Order({
               setSellingPrice(e.target.value);
             }}
           />
+          USD
         </div>
 
         <Button variant={"default"} className="w-full font-bold">
