@@ -139,18 +139,22 @@ export default function Transaction({
             <Button
               disabled={completedTxs > 0}
               onClick={async () => {
-                const tx = await writeContractAsync({
-                  abi: erc20Abi,
-                  address:
-                    supportedchains[(chainId || 11155111).toString()].approve,
-                  functionName: "approve",
-                  args: [
-                    supportedchains[(chainId || 11155111).toString()].address,
-                    BigInt(fromAmount),
-                  ],
-                });
-                setApproveTx(tx);
-                setCompletedTxs(completedTxs + 1);
+                try {
+                  const tx = await writeContractAsync({
+                    abi: erc20Abi,
+                    address:
+                      supportedchains[(chainId || 11155111).toString()].approve,
+                    functionName: "approve",
+                    args: [
+                      supportedchains[(chainId || 11155111).toString()].address,
+                      BigInt(fromAmount),
+                    ],
+                  });
+                  setApproveTx(tx);
+                  setCompletedTxs(completedTxs + 1);
+                } catch (e) {
+                  console.log(e);
+                }
               }}
             >
               Approve {supportedcoins[fromToken].symbol}
@@ -161,35 +165,39 @@ export default function Transaction({
               completedTxs == 0 && fromToken != "eth" && fromToken != "matic"
             }
             onClick={async () => {
-              if (action == "swap") {
-                const tx = await writeContractAsync({
-                  abi: ONE_INCH_ABI,
-                  address:
-                    supportedchains[(chainId || 11155111).toString()].address,
-                  functionName: "swap",
-                  args: [
-                    supportedchains[(chainId || 11155111).toString()].approve,
-                    supportedchains[(chainId || 11155111).toString()].approve,
-                    BigInt(fromAmount),
-                  ],
-                });
-                setActionTx(tx);
-              } else {
-                const tx = await writeContractAsync({
-                  abi: ONE_INCH_ABI,
-                  address:
-                    supportedchains[(chainId || 11155111).toString()].address,
-                  functionName: "createOrder",
-                  args: [
-                    supportedchains[(chainId || 11155111).toString()].approve,
-                    supportedchains[(chainId || 11155111).toString()].approve,
-                    BigInt(fromAmount),
-                  ],
-                });
-                setActionTx(tx);
-              }
+              try {
+                if (action == "swap") {
+                  const tx = await writeContractAsync({
+                    abi: ONE_INCH_ABI,
+                    address:
+                      supportedchains[(chainId || 11155111).toString()].address,
+                    functionName: "swap",
+                    args: [
+                      supportedchains[(chainId || 11155111).toString()].approve,
+                      supportedchains[(chainId || 11155111).toString()].approve,
+                      BigInt(fromAmount),
+                    ],
+                  });
+                  setActionTx(tx);
+                } else {
+                  const tx = await writeContractAsync({
+                    abi: ONE_INCH_ABI,
+                    address:
+                      supportedchains[(chainId || 11155111).toString()].address,
+                    functionName: "createOrder",
+                    args: [
+                      supportedchains[(chainId || 11155111).toString()].approve,
+                      supportedchains[(chainId || 11155111).toString()].approve,
+                      BigInt(fromAmount),
+                    ],
+                  });
+                  setActionTx(tx);
+                }
 
-              setCompletedTxs(completedTxs + 1);
+                setCompletedTxs(completedTxs + 1);
+              } catch (e) {
+                console.log(e);
+              }
             }}
           >
             {action == "swap" ? "Perform Swap" : "Create Order"}
