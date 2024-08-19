@@ -2,6 +2,7 @@
 
 import AIComponent from "@/components/sections/ai";
 import Swap from "@/components/sections/swap";
+import Transaction from "@/components/sections/transaction";
 import AppComponent from "@/components/ui/app-component";
 
 import ConnectButton from "@/components/ui/connect-button";
@@ -14,7 +15,7 @@ import { useAccount, useBalance, useSwitchChain } from "wagmi";
 interface ClassifyResponse {
   response: string;
   action: string;
-  params: string[];
+  params: string;
 }
 
 export default function Page() {
@@ -30,33 +31,53 @@ export default function Page() {
   const [fromCoversionValue, setFromConversionValue] = useState("0");
   const [toCoversionValue, setToConversionValue] = useState("0");
   const [conversionLoading, setConversionLoading] = useState(false);
+  const [openTransaction, setOpenTransaction] = useState(false);
   const [slippage, setSlippage] = useState("0.1");
   const [sellingPrice, setSellingPrice] = useState("0");
-  const [sellingPriceLoading, setSellingPriceLoading] = useState(false);
   const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
     response: "",
     action: "",
-    params: [],
+    params: "",
   });
+  const [readyForTrigger, setReadyForTrigger] = useState(false);
   useEffect(() => {
     console.log("Classify Response");
     console.log(classifyResponse);
     if (classifyResponse.action.length > 0) {
-      if (classifyResponse.action == "swap") {
-        const chain = classifyResponse.params[0];
-        if (
-          chain.toLocaleLowerCase() !=
-          supportedchains[chainId || 11155111].symbol.toLocaleLowerCase()
-        )
+      setSelectedAction(classifyResponse.action == "swap" ? false : true);
+      const p = classifyResponse.params.split("_");
+      console.log(p);
+      if (classifyResponse.params.length > 0 && p.length > 0) {
+        const chain = p[0];
+
+        const selectedChainId =
+          chain.toLocaleLowerCase() == "polygon"
+            ? 80002
+            : chain.toLocaleLowerCase() == "arbitrum"
+            ? 421614
+            : 11155111;
+        if (selectedChainId != chainId)
           switchChain({
-            chainId:
-              supportedchains[classifyResponse.params[0].toLocaleLowerCase()],
+            chainId: selectedChainId,
           });
-        setFromToken(classifyResponse.params[1]);
-        setToToken(classifyResponse.params[2]);
-        setSlippage(classifyResponse.params[3]);
-        setFromAmount(classifyResponse.params[4]);
-      }
+        if (
+          readyForTrigger &&
+          p[1] == fromToken &&
+          p[2] == toToken &&
+          ((classifyResponse.action == "swap" && p[3] == slippage) ||
+            (classifyResponse.action == "order" && p[3] == sellingPrice)) &&
+          p[4] == fromAmount
+        ) {
+          setOpenTransaction(true);
+          setReadyForTrigger(false);
+        } else {
+          setFromToken(p[1]);
+          setToToken(p[2]);
+          setSlippage(p[3]);
+          setFromAmount(p[4]);
+          setReadyForTrigger(true);
+        }
+      } else setReadyForTrigger(false);
     }
   }, [classifyResponse]);
 
@@ -130,7 +151,7 @@ export default function Page() {
         setSlippage={setSlippage}
         setSellingPrice={setSellingPrice}
         sellingPrice={sellingPrice}
-        sellingPriceLoading={sellingPriceLoading}
+        sellingPriceLoading={conversionLoading}
         toLoading={toLoading}
       />
 
@@ -141,6 +162,14 @@ export default function Page() {
           setClassifyResponse={setClassifyResponse}
         />
       </div>
+      <Transaction
+        open={openTransaction}
+        action={selectedAction == false ? "swap" : "order"}
+        fromAmount={fromAmount}
+        fromToken={fromToken}
+        toToken={toToken}
+        toAmount={toAmount}
+      />
     </div>
   ) : (
     <div className="h-screen flex flex-col justify-center items-center">

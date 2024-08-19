@@ -29,7 +29,7 @@ interface Convo {
 interface ClassifyResponse {
   response: string;
   action: string;
-  params: string[];
+  params: string;
 }
 
 export default function AIComponent({

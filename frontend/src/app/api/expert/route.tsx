@@ -2,8 +2,8 @@
 import axios from "axios";
 import { NextRequest } from "next/server";
 
-// TODO: Change this url
-const url = "https://17f4-103-163-248-253.ngrok-free.app/process_message";
+const url = process.env.NEXT_PUBLIC_EXPERT_URL || "";
+
 export async function POST(req: NextRequest, res: Response) {
   try {
     const body = await req.json();
