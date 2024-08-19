@@ -64,13 +64,6 @@ export const supportedchains: Record<string, any> = {
     symbol: "ETH",
     explorer: "https://sepolia-explorer.arbitrum.io/",
   },
-  421612: {
-    name: "Arbitrum",
-    chainId: 421612,
-    image: "/coins/arbitrum.png",
-    symbol: "ETH",
-    explorer: "",
-  },
   11155111: {
     name: "Ethereum",
     chainId: 11155111,
@@ -78,26 +71,12 @@ export const supportedchains: Record<string, any> = {
     image: "/coins/ethereum.png",
     explorer: "https://eth-sepolia.blockscout.com/",
   },
-  1: {
-    name: "Ethereum",
-    chainId: 1,
-    symbol: "ETH",
-    image: "/coins/ethereum.png",
-    explorer: "",
-  },
   80002: {
     name: "Polygon",
     chainId: 80002,
     symbol: "MATIC",
     image: "/coins/polygon.png",
     explorer: "https://www.oklink.com/amoy/",
-  },
-  137: {
-    name: "Polygon",
-    chainId: 137,
-    symbol: "MATIC",
-    image: "/coins/polygon.png",
-    explorer: "",
   },
 };
 

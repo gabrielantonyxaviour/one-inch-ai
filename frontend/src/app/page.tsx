@@ -72,9 +72,12 @@ export default function Page() {
           setOpenTransaction(true);
           setReadyForTrigger(false);
         } else {
-          setFromToken(p[1]);
-          setToToken(p[2]);
-          setSlippage(p[3]);
+          setFromToken(p[1].toLocaleLowerCase());
+          setToToken(p[2].toLocaleLowerCase());
+          if (classifyResponse.action == "swap") setSlippage(p[3]);
+          else {
+            setSellingPrice((parseFloat(p[3]) / parseFloat(p[4])).toString());
+          }
           setFromAmount(p[4]);
           setReadyForTrigger(true);
         }

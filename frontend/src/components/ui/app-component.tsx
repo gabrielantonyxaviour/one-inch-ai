@@ -128,6 +128,7 @@ export default function AppComponent({
                 <MenubarContent>
                   {Object.values(supportedchains).map((coin) => (
                     <MenubarItem
+                      className="my-2 cursor-pointer w-full"
                       onClick={async () => {
                         await switchChainAsync({
                           chainId: coin.chainId,
