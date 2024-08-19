@@ -30,6 +30,7 @@ interface AppComponentProps {
   setSellingPrice: (sellingPrice: string) => void;
   toLoading: boolean;
   sellingPriceLoading: boolean;
+  triggerAction: () => void;
 }
 export default function AppComponent({
   selectedAction,
@@ -47,6 +48,7 @@ export default function AppComponent({
   setSellingPrice,
   toLoading,
   sellingPriceLoading,
+  triggerAction,
 }: AppComponentProps) {
   const [chevron, setChevron] = useState(false);
   const { chainId } = useAccount();
@@ -163,6 +165,7 @@ export default function AppComponent({
               sellingPrice,
               setSellingPrice,
               sellingPriceLoading,
+              triggerAction,
             }}
           />
         ) : (
@@ -178,6 +181,7 @@ export default function AppComponent({
               setSlippage,
               slippage,
               toLoading,
+              triggerAction,
             }}
           />
         )}

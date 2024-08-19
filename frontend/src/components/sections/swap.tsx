@@ -16,6 +16,7 @@ interface SwapProps {
   slippage: string;
   setSlippage: (slippage: string) => void;
   toLoading: boolean;
+  triggerAction: () => void;
 }
 
 export default function Swap({
@@ -29,6 +30,7 @@ export default function Swap({
   setSlippage,
   slippage,
   toLoading,
+  triggerAction,
 }: SwapProps) {
   const { switchChainAsync } = useSwitchChain();
   const { chainId } = useAccount();
@@ -54,7 +56,13 @@ export default function Swap({
           toLoading={toLoading}
         />
         <Slippage slippage={slippage} setSlippage={setSlippage} />
-        <Button variant={"default"} className="w-full font-bold">
+        <Button
+          variant={"default"}
+          className="w-full font-bold"
+          onClick={() => {
+            triggerAction();
+          }}
+        >
           Swap
         </Button>
       </CardContent>

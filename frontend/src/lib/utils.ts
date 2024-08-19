@@ -12,7 +12,7 @@ export function roundUpToFiveDecimals(floatStr: string): string {
 
   // If the string cannot be parsed to a number, throw an error
   if (isNaN(num)) {
-    throw new Error("Invalid number string");
+    return "0.00";
   }
 
   // Multiply by 10^5, round up using Math.ceil, and then divide back by 10^5

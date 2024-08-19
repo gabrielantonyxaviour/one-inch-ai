@@ -17,6 +17,7 @@ interface OrderProps {
   sellingPrice: string;
   setSellingPrice: (sellingPrice: string) => void;
   sellingPriceLoading: boolean;
+  triggerAction: () => void;
 }
 
 export default function Order({
@@ -30,6 +31,7 @@ export default function Order({
   setSellingPrice,
   sellingPrice,
   sellingPriceLoading,
+  triggerAction,
 }: OrderProps) {
   const { chainId } = useAccount();
   if (chainId == undefined)
@@ -65,7 +67,13 @@ export default function Order({
           USD
         </div>
 
-        <Button variant={"default"} className="w-full font-bold">
+        <Button
+          variant={"default"}
+          className="w-full font-bold"
+          onClick={() => {
+            triggerAction();
+          }}
+        >
           Create Limit Order
         </Button>
       </CardContent>

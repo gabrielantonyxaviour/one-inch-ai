@@ -65,7 +65,8 @@ export default function Page() {
           p[1] == fromToken &&
           p[2] == toToken &&
           ((classifyResponse.action == "swap" && p[3] == slippage) ||
-            (classifyResponse.action == "order" && p[3] == sellingPrice)) &&
+            (classifyResponse.action == "limit order" &&
+              p[3] == sellingPrice)) &&
           p[4] == fromAmount
         ) {
           setOpenTransaction(true);
@@ -116,9 +117,12 @@ export default function Page() {
 
   useEffect(() => {
     if (selectedAction) {
+      if (sellingPrice == "0") setSellingPrice(fromCoversionValue);
       const f = fromAmount == "" ? "0" : fromAmount;
       const s = sellingPrice == "" ? "0" : sellingPrice;
-      setToAmount((parseFloat(f) * parseFloat(s)).toString());
+      const cValue = parseFloat(s) / parseFloat(toCoversionValue);
+      setConversionValue(cValue.toString());
+      setToAmount((parseFloat(f) * cValue).toString());
     } else {
       console.log(fromAmount);
       console.log(conversionValue);
@@ -134,6 +138,26 @@ export default function Page() {
       );
     }
   }, [fromAmount, slippage, sellingPrice]);
+
+  useEffect(() => {
+    if (selectedAction) {
+      const f = fromAmount == "" ? "0" : fromAmount;
+      const s = sellingPrice == "" ? "0" : sellingPrice;
+      const cValue = parseFloat(s) / parseFloat(toCoversionValue);
+      setConversionValue(cValue.toString());
+      setToAmount((parseFloat(f) * cValue).toString());
+    } else {
+      const cValue =
+        parseFloat(fromCoversionValue) / parseFloat(toCoversionValue);
+      console.log(cValue);
+      const f = fromAmount == "" ? "0" : fromAmount;
+      const s = slippage == "" ? "0" : slippage;
+      const cValueWithSlippage = cValue * (1 - parseFloat(s) / 100);
+
+      setConversionValue(cValue.toString());
+      setToAmount((parseFloat(f) * cValueWithSlippage).toString());
+    }
+  }, [selectedAction]);
 
   return status == "connected" ? (
     <div className="h-screen flex ">
@@ -153,6 +177,9 @@ export default function Page() {
         sellingPrice={sellingPrice}
         sellingPriceLoading={conversionLoading}
         toLoading={toLoading}
+        triggerAction={() => {
+          setOpenTransaction(true);
+        }}
       />
 
       <div className="flex-1 flex flex-col justify-center p-4 h-full bg-background ">
