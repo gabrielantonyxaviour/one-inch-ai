@@ -57,21 +57,39 @@ export const supportedcoins: Record<string, any> = {
 };
 
 export const supportedchains: Record<string, any> = {
-  42161: {
+  421614: {
     name: "Arbitrum",
-    chainId: 42161,
+    chainId: 421614,
     image: "/coins/arbitrum.png",
     symbol: "ETH",
   },
-  1: {
+  421612: {
+    name: "Arbitrum",
+    chainId: 421614,
+    image: "/coins/arbitrum.png",
+    symbol: "ETH",
+  },
+  11155111: {
     name: "Ethereum",
-    chainId: 1,
+    chainId: 11155111,
     symbol: "ETH",
     image: "/coins/ethereum.png",
   },
+  1: {
+    name: "Ethereum",
+    chainId: 11155111,
+    symbol: "ETH",
+    image: "/coins/ethereum.png",
+  },
+  80002: {
+    name: "Polygon",
+    chainId: 80002,
+    symbol: "MATIC",
+    image: "/coins/polygon.png",
+  },
   137: {
     name: "Polygon",
-    chainId: 137,
+    chainId: 80002,
     symbol: "MATIC",
     image: "/coins/polygon.png",
   },

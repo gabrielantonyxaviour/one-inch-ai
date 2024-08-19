@@ -25,7 +25,20 @@ interface Convo {
   isAI: boolean;
   message: string;
 }
-export default function AIComponent() {
+
+interface ClassifyResponse {
+  response: string;
+  action: string;
+  params: string[];
+}
+
+export default function AIComponent({
+  classifyResponse,
+  setClassifyResponse,
+}: {
+  classifyResponse: ClassifyResponse;
+  setClassifyResponse: (classifyResponse: ClassifyResponse) => void;
+}) {
   const [convos, setConvos] = useState<Convo[]>([
     {
       id: "1",
@@ -130,6 +143,7 @@ export default function AIComponent() {
               },
             ]);
 
+            setClassifyResponse(response.data.response);
             setPrompt("");
           }}
         >

@@ -17,6 +17,7 @@ import Slippage from "./slippage";
 import { FusionSDK, NetworkEnum } from "@1inch/fusion-sdk";
 import { useEffect } from "react";
 import axios from "axios";
+import Spinner from "../ui/loading";
 interface SwapProps {
   selectedAction: boolean;
   setSelectedAction: (selectedAction: boolean) => void;
@@ -56,13 +57,12 @@ export default function Swap({
 }: SwapProps) {
   const { switchChainAsync } = useSwitchChain();
   const { chainId } = useAccount();
-  useEffect(() => {
-    (async function () {
-      console.log("FETCHING ORDERS");
-      const response = await axios.post("/api/one-inch/get-quote");
-      console.log(response.data);
-    })();
-  }, [chainId]);
+  if (chainId == undefined)
+    return (
+      <div className="w-[75%] flex flex-col justify-center items-center">
+        <Spinner />
+      </div>
+    );
   return (
     <div className="w-[75%] flex flex-col justify-center items-center">
       <Image src="/logo.png" width={100} height={100} alt="" />

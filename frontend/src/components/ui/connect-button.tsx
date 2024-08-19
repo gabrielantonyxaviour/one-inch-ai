@@ -5,11 +5,18 @@ import { Button } from "./button";
 import { Icons } from "./icons";
 import { useWalletInfo, useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
+import Spinner from "./loading";
 
 export default function ConnectButton() {
   const { address, status, chainId } = useAccount();
   const { open, close } = useWeb3Modal();
   const { walletInfo } = useWalletInfo();
+  if (walletInfo == undefined && status != "disconnected")
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
   return status == "connected" ? (
     <Button
       variant="outline"
