@@ -2,6 +2,7 @@
 
 import AIComponent from "@/components/sections/ai";
 import Swap from "@/components/sections/swap";
+import AppComponent from "@/components/ui/app-component";
 
 import ConnectButton from "@/components/ui/connect-button";
 import { supportedchains } from "@/lib/constants";
@@ -26,6 +27,7 @@ export default function Page() {
   const [toToken, setToToken] = useState("link");
   const [toAmount, setToAmount] = useState("0");
   const [slippage, setSlippage] = useState("0.1");
+  const [sellingPrice, setSellingPrice] = useState("0");
   const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
     response: "",
     action: "",
@@ -55,15 +57,11 @@ export default function Page() {
   }, [classifyResponse]);
   return status == "connected" ? (
     <div className="h-screen flex ">
-      <Swap
+      <AppComponent
         selectedAction={selectedAction}
         setSelectedAction={setSelectedAction}
-        fromChevron={fromChevron}
-        toChevron={toChevron}
-        setFromChevron={setFromChevron}
         setFromAmount={setFromAmount}
         setToAmount={setToAmount}
-        setToChevron={setToChevron}
         fromAmount={fromAmount}
         toAmount={toAmount}
         fromToken={fromToken}
@@ -72,7 +70,10 @@ export default function Page() {
         setToToken={setToToken}
         slippage={slippage}
         setSlippage={setSlippage}
+        setSellingPrice={setSellingPrice}
+        sellingPrice={sellingPrice}
       />
+
       <div className="flex-1 flex flex-col justify-center p-4 h-full bg-background ">
         <ConnectButton />
         <AIComponent

@@ -11,22 +11,20 @@ import {
 } from "@/components/ui/menubar";
 import Image from "next/image";
 import { useAccount } from "wagmi";
+import { useState } from "react";
 export default function To({
-  toChevron,
-  setToChevron,
   toAmount,
   setToAmount,
   toToken,
   setToToken,
 }: {
-  toChevron: boolean;
-  setToChevron: (toChevron: boolean) => void;
   toAmount: string;
   setToAmount: (toAmount: string) => void;
   toToken: string;
   setToToken: (toToken: string) => void;
 }) {
   const { chainId } = useAccount();
+  const [toChevron, setToChevron] = useState(false);
   return (
     <Card className="w-full border-white bg-zinc-950">
       <CardTitle>

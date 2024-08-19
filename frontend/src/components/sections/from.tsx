@@ -11,22 +11,20 @@ import {
 } from "@/components/ui/menubar";
 import Image from "next/image";
 import { useAccount } from "wagmi";
+import { useState } from "react";
 export default function From({
-  fromChevron,
-  setFromChevron,
   fromAmount,
   setFromAmount,
   fromToken,
   setFromToken,
 }: {
-  fromChevron: boolean;
-  setFromChevron: (fromChevron: boolean) => void;
   fromAmount: string;
   setFromAmount: (fromAmount: string) => void;
   fromToken: string;
   setFromToken: (fromToken: string) => void;
 }) {
   const { chainId } = useAccount();
+  const [chevron, setChevron] = useState(false);
   return (
     <Card className="w-full  border-none bg-zinc-950">
       <CardTitle>
@@ -37,14 +35,14 @@ export default function From({
       <CardContent className="flex justify-between p-0">
         <Menubar
           onClick={() => {
-            setFromChevron(!fromChevron);
+            setChevron(!chevron);
           }}
           className="border-none"
         >
           <MenubarMenu>
             <MenubarTrigger
               onClick={() => {
-                setFromChevron(!fromChevron);
+                setChevron(!chevron);
               }}
             >
               <div className="flex space-x-2 items-center ">
@@ -56,11 +54,7 @@ export default function From({
                   className="rounded-full"
                 />
                 <p>{supportedcoins[fromToken].symbol}</p>
-                {!fromChevron ? (
-                  <ChevronUp size={20} />
-                ) : (
-                  <ChevronDown size={20} />
-                )}
+                {!chevron ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
             </MenubarTrigger>
             <MenubarContent>
@@ -71,7 +65,7 @@ export default function From({
                       (chainId || 11155111).toString()
                     ].symbol.toLowerCase()
                   );
-                  setFromChevron(true);
+                  setChevron(true);
                 }}
               >
                 <div className="flex space-x-2">
@@ -95,7 +89,7 @@ export default function From({
                   <MenubarItem
                     onClick={() => {
                       setFromToken(coin.symbol.toLowerCase());
-                      setFromChevron(true);
+                      setChevron(true);
                     }}
                   >
                     <div className="flex space-x-2">

@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import From from "./from";
 import To from "./to";
-import { useAccount, useSwitchChain } from "wagmi";
-import Slippage from "./slippage";
+import { useAccount } from "wagmi";
 import Spinner from "../ui/loading";
-interface SwapProps {
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+interface OrderProps {
   fromAmount: string;
   setFromAmount: (fromAmount: string) => void;
   fromToken: string;
@@ -14,11 +15,11 @@ interface SwapProps {
   setToToken: (toToken: string) => void;
   toAmount: string;
   setToAmount: (toAmount: string) => void;
-  slippage: string;
-  setSlippage: (slippage: string) => void;
+  sellingPrice: string;
+  setSellingPrice: (sellingPrice: string) => void;
 }
 
-export default function Swap({
+export default function Order({
   fromAmount,
   setFromAmount,
   fromToken,
@@ -27,10 +28,9 @@ export default function Swap({
   setToToken,
   toAmount,
   setToAmount,
-  setSlippage,
-  slippage,
-}: SwapProps) {
-  const { switchChainAsync } = useSwitchChain();
+  setSellingPrice,
+  sellingPrice,
+}: OrderProps) {
   const { chainId } = useAccount();
   if (chainId == undefined)
     return (
@@ -53,9 +53,19 @@ export default function Swap({
           toToken={toToken}
           setToToken={setToToken}
         />
-        <Slippage slippage={slippage} setSlippage={setSlippage} />
+        <div className="flex justify-between items-center my-4">
+          <p>Pay {fromToken.toUpperCase()} at price</p>
+          <Input
+            className="font-semibold border-none w-[50%] text-right hover:border-none"
+            value={sellingPrice}
+            onChange={(e) => {
+              setSellingPrice(e.target.value);
+            }}
+          />
+        </div>
+
         <Button variant={"default"} className="w-full font-bold">
-          Swap
+          Create Limit Order
         </Button>
       </CardContent>
     </Card>
