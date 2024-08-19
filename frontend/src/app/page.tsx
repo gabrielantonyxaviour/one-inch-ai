@@ -194,6 +194,7 @@ export default function Page() {
       </div>
       <Transaction
         open={openTransaction}
+        setOpen={setOpenTransaction}
         action={selectedAction == false ? "swap" : "order"}
         fromAmount={fromAmount}
         fromToken={fromToken}
