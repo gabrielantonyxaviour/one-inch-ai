@@ -51,7 +51,7 @@ export default function Page() {
         const chain = p[0];
 
         const selectedChainId =
-          chain.toLocaleLowerCase() == "polygon"
+          chain.toLocaleLowerCase() == "matic"
             ? 80002
             : chain.toLocaleLowerCase() == "arbitrum"
             ? 421614
@@ -62,8 +62,8 @@ export default function Page() {
           });
         if (
           readyForTrigger &&
-          p[1] == fromToken &&
-          p[2] == toToken &&
+          p[1].toLocaleLowerCase() == fromToken &&
+          p[2].toLocaleLowerCase() == toToken &&
           ((classifyResponse.action == "swap" && p[3] == slippage) ||
             (classifyResponse.action == "limit order" &&
               p[3] == sellingPrice)) &&
